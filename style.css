@@ -22,11 +22,13 @@ body {
     color: var(--text-color);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* 改為 flex-start 以支援滾動 */
     min-height: 100vh;
     margin: 0;
-    overflow: hidden; /* 防止背景動畫產生滾動條 */
+    overflow-x: hidden; /* 只隱藏水平滾動條 */
+    overflow-y: auto; /* 允許垂直滾動 */
     position: relative;
+    padding: 2rem 0; /* 添加上下內邊距 */
     /* 過渡效果 */
     transition: background-color 0.5s ease;
 }
@@ -63,6 +65,7 @@ body {
     max-width: 600px; /* 增加最大寬度 */
     position: relative;
     z-index: 1; /* 確保在背景之上 */
+    margin: 2rem auto; /* 添加上下邊距，確保滾動時有間距 */
 }
 
 header h1 {
@@ -330,9 +333,14 @@ header h1 {
 
 /* 響應式設計 */
 @media (max-width: 600px) {
+    body {
+        padding: 1rem 0; /* 減少上下內邊距 */
+    }
+    
     .glass-container {
         padding: 2rem;
         border-radius: 15px;
+        margin: 1rem auto; /* 減少邊距 */
     }
 
     header h1 {
@@ -353,5 +361,24 @@ header h1 {
 
     .result {
         font-size: 1.4rem;
+    }
+    
+    /* 語音設定面板在小螢幕上的調整 */
+    .voice-settings {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .voice-settings h3 {
+        font-size: 1.1rem;
+    }
+    
+    .voice-controls {
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .voice-params {
+        gap: 0.8rem;
     }
 }
