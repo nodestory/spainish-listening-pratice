@@ -83,8 +83,9 @@ header h1 {
 .main-action-area {
     margin-bottom: 2rem; /* 增加區塊間距 */
     display: flex;
-    justify-content: center; /* 水平置中 */
-    align-items: center; /* 垂直置中 */
+    flex-direction: column; /* 垂直排列 */
+    gap: 1rem; /* 按鈕間距 */
+    align-items: center; /* 置中 */
 }
 
 /* 按鈕區塊 */
@@ -237,6 +238,94 @@ header h1 {
 
 .result.incorrect {
     color: var(--danger-color); /* 亮橘色 */
+}
+
+/* 語音設定面板 */
+.voice-settings {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    border: 1px solid var(--glass-border);
+}
+
+.voice-settings h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.3rem;
+    color: var(--text-color);
+}
+
+.voice-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.voice-controls label {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.glass-select {
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    font-size: 1rem;
+    outline: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-select:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.voice-params {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.voice-params label {
+    color: var(--text-color);
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.glass-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.glass-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.glass-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* 響應式設計 */
