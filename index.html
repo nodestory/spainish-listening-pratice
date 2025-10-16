@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西班牙文數字聽力練習</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="glass-container">
+        <header>
+            <h1>Práctica de Números</h1>
+            <p class="subtitle">聆聽西班牙文數字，然後輸入你的答案。</p>
+        </header>
+        
+        <div class="main-action-area">
+            <button id="main-action-btn" class="glass-button primary-button">▶️ 開始練習</button>
+        </div>
+
+        <div id="result-message" class="result"></div>
+        
+        <div class="quiz-area">
+            <input type="number" id="answer-input" class="glass-input" placeholder="在這裡輸入數字..." disabled>
+            <div class="button-row">
+                <button id="repeat-btn" class="glass-button secondary-button" disabled>🔁 重聽一次</button>
+                <button id="action-btn" class="glass-button primary-button" disabled>檢查答案</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="background-gradient"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/numero-a-letras@1.0.6/build/numero-a-letras.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
