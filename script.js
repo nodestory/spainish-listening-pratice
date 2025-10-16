@@ -7,7 +7,7 @@ function numberToSpanishWords(n) {
   }
 
   const units = [
-    "", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve",
+    "", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve",
     "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"
   ];
   const tens = [
@@ -91,9 +91,15 @@ const pitchValue = document.getElementById('pitch-value');
 const voiceSettings = document.querySelector('.voice-settings');
 const voiceSettingsBtn = document.getElementById('voice-settings-btn');
 
+// 數字按鈕相關元素
+const numberPad = document.getElementById('number-pad');
+const numberDisplay = document.getElementById('number-display');
+const numberButtons = document.querySelectorAll('.number-btn');
+
 // 2. 全域變數
 let currentNumber = 0;
 let currentSpanishText = '';
+let currentInputValue = '0'; // 數字按鈕的當前值
 
 // 3. 初始化語音合成器
 const synth = window.speechSynthesis;
@@ -163,6 +169,50 @@ if (synth.onvoiceschanged !== undefined) {
 
 // 立即嘗試載入語音
 loadVoices();
+
+// 檢測是否為手機設備
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+           window.innerWidth <= 768;
+}
+
+// 更新數字顯示
+function updateNumberDisplay() {
+    if (numberDisplay) {
+        numberDisplay.textContent = currentInputValue;
+    }
+    if (answerInput) {
+        answerInput.value = currentInputValue;
+    }
+}
+
+// 處理數字按鈕點擊
+function handleNumberButtonClick(button) {
+    const number = button.dataset.number;
+    const action = button.dataset.action;
+    
+    if (number !== undefined) {
+        // 數字按鈕
+        if (currentInputValue === '0') {
+            currentInputValue = number;
+        } else {
+            currentInputValue += number;
+        }
+        updateNumberDisplay();
+    } else if (action === 'clear') {
+        // 清除按鈕
+        currentInputValue = '0';
+        updateNumberDisplay();
+    } else if (action === 'backspace') {
+        // 退格按鈕
+        if (currentInputValue.length > 1) {
+            currentInputValue = currentInputValue.slice(0, -1);
+        } else {
+            currentInputValue = '0';
+        }
+        updateNumberDisplay();
+    }
+}
 
 // ==========================================================
 // 核心 UX 邏輯：全新的三階段 UI 狀態管理器
@@ -264,12 +314,17 @@ function speak(text) {
 
 // 產生新題目的函式 (現在由主按鈕觸發)
 async function startNewQuestion() {
-    currentNumber = Math.floor(Math.random() * 100);
+    currentNumber = Math.floor(Math.random() * 1000);
     currentSpanishText = numberToSpanishWords(currentNumber);
 
+    // 重置輸入值
+    currentInputValue = '0';
     answerInput.value = '';
     resultMessage.textContent = '';
     resultMessage.className = 'result';
+    
+    // 更新數字顯示
+    updateNumberDisplay();
 
     try {
         await speak(currentSpanishText);
@@ -286,7 +341,7 @@ async function startNewQuestion() {
 
 // 檢查答案的函式
 function checkAnswer() {
-    const userAnswer = parseInt(answerInput.value, 10);
+    const userAnswer = parseInt(currentInputValue, 10);
 
     resultMessage.className = 'result';
 
@@ -384,6 +439,13 @@ if (voiceSettingsBtn && voiceSettings) {
     });
 }
 
+// 數字按鈕事件監聽器
+numberButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        handleNumberButtonClick(button);
+    });
+});
+
 // ==========================================================
 // 5. 頁面載入時的初始設定
 // ==========================================================
@@ -407,6 +469,29 @@ function initializeApp() {
             loadVoices();
         }, 1000);
     }
+    
+    // 根據設備類型設定輸入方式
+    if (isMobileDevice()) {
+        // 手機設備：隱藏輸入框，顯示數字按鈕
+        if (answerInput) {
+            answerInput.style.display = 'none';
+        }
+        if (numberPad) {
+            numberPad.style.display = 'block';
+        }
+    } else {
+        // 桌面設備：顯示輸入框，隱藏數字按鈕
+        if (answerInput) {
+            answerInput.style.display = 'block';
+        }
+        if (numberPad) {
+            numberPad.style.display = 'none';
+        }
+    }
+    
+    // 初始化數字顯示
+    updateNumberDisplay();
+    
     updateUIState('initial');
 }
 

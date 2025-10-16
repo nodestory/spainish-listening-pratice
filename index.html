@@ -44,6 +44,28 @@
         
         <div class="quiz-area">
             <input type="number" id="answer-input" class="glass-input" placeholder="在這裡輸入數字..." disabled>
+            
+            <!-- 手機版數字按鈕面板 -->
+            <div id="number-pad" class="number-pad" style="display: none;">
+                <div class="number-display">
+                    <span id="number-display">0</span>
+                </div>
+                <div class="number-buttons">
+                    <button class="number-btn" data-number="1">1</button>
+                    <button class="number-btn" data-number="2">2</button>
+                    <button class="number-btn" data-number="3">3</button>
+                    <button class="number-btn" data-number="4">4</button>
+                    <button class="number-btn" data-number="5">5</button>
+                    <button class="number-btn" data-number="6">6</button>
+                    <button class="number-btn" data-number="7">7</button>
+                    <button class="number-btn" data-number="8">8</button>
+                    <button class="number-btn" data-number="9">9</button>
+                    <button class="number-btn clear-btn" data-action="clear">清除</button>
+                    <button class="number-btn" data-number="0">0</button>
+                    <button class="number-btn backspace-btn" data-action="backspace">⌫</button>
+                </div>
+            </div>
+            
             <div class="button-row">
                 <button id="repeat-btn" class="glass-button secondary-button" disabled>🔁 重聽一次</button>
                 <button id="action-btn" class="glass-button primary-button" disabled>檢查答案</button>

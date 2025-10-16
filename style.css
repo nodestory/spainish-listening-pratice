@@ -331,6 +331,96 @@ header h1 {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
+/* 數字按鈕面板 */
+.number-pad {
+    width: 100%;
+    max-width: 350px;
+    margin: 1rem auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.number-display {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.number-display span {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.number-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+}
+
+.number-btn {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.number-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.number-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.clear-btn, .backspace-btn {
+    background: linear-gradient(135deg, rgba(255, 107, 67, 0.3), rgba(255, 107, 67, 0.2));
+    border-color: rgba(255, 107, 67, 0.5);
+    font-size: 1.2rem;
+}
+
+.clear-btn:hover, .backspace-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 107, 67, 0.4), rgba(255, 107, 67, 0.3));
+}
+
 /* 響應式設計 */
 @media (max-width: 600px) {
     body {
@@ -380,5 +470,30 @@ header h1 {
     
     .voice-params {
         gap: 0.8rem;
+    }
+    
+    /* 手機版：隱藏輸入框，顯示數字按鈕 */
+    .glass-input {
+        display: none;
+    }
+    
+    .number-pad {
+        display: block !important;
+        margin: 1rem auto;
+        padding: 1rem;
+    }
+    
+    .number-buttons {
+        gap: 0.6rem;
+    }
+    
+    .number-btn {
+        font-size: 1.3rem;
+        padding: 0.8rem;
+        min-height: 3rem;
+    }
+    
+    .number-display span {
+        font-size: 1.8rem;
     }
 }
