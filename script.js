@@ -108,24 +108,36 @@ let spanishVoice = null;
 
 // 載入可用的語音
 function loadVoices() {
-    voices = synth.getVoices();
+    const allVoices = synth.getVoices();
+    
+    // 只保留西班牙語語音
+    voices = allVoices.filter(voice => voice.lang.startsWith('es'));
     
     // 更新語音選擇下拉選單
     updateVoiceSelect();
     
-    // 尋找西班牙語語音
+    // 尋找最佳的西班牙語語音
     spanishVoice = voices.find(voice => 
-        voice.lang.startsWith('es') && 
-        (voice.name.includes('Spanish') || voice.name.includes('Español'))
+        voice.name.includes('Spanish') || 
+        voice.name.includes('Español') ||
+        voice.name.includes('es-ES') ||
+        voice.name.includes('es-MX')
     );
     
-    // 如果找不到西班牙語語音，使用第一個可用的語音
+    // 如果找不到特定的西班牙語語音，使用第一個西班牙語語音
     if (!spanishVoice && voices.length > 0) {
         spanishVoice = voices[0];
     }
     
-    console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
-    console.log('Selected Spanish voice:', spanishVoice ? `${spanishVoice.name} (${spanishVoice.lang})` : 'None');
+    // 如果完全沒有西班牙語語音，使用第一個可用的語音作為備用
+    if (!spanishVoice && allVoices.length > 0) {
+        spanishVoice = allVoices[0];
+        console.warn('未找到西班牙語語音，使用備用語音:', spanishVoice.name);
+    }
+    
+    console.log('所有語音:', allVoices.map(v => `${v.name} (${v.lang})`));
+    console.log('西班牙語語音:', voices.map(v => `${v.name} (${v.lang})`));
+    console.log('選中的語音:', spanishVoice ? `${spanishVoice.name} (${spanishVoice.lang})` : 'None');
 }
 
 // 更新語音選擇下拉選單
@@ -135,21 +147,37 @@ function updateVoiceSelect() {
     voiceSelect.innerHTML = '';
     
     if (voices.length === 0) {
-        voiceSelect.innerHTML = '<option value="">載入中...</option>';
+        voiceSelect.innerHTML = '<option value="">未找到西班牙語語音</option>';
         return;
     }
     
-    // 添加所有語音選項
+    // 只添加西班牙語語音選項
     voices.forEach((voice, index) => {
         const option = document.createElement('option');
         option.value = index;
-        option.textContent = `${voice.name} (${voice.lang})`;
         
-        // 標記西班牙語語音
-        if (voice.lang.startsWith('es')) {
-            option.textContent += ' 🇪🇸';
+        // 格式化語音名稱，移除語言代碼（因為都是西班牙語）
+        let displayName = voice.name;
+        if (displayName.includes('Spanish')) {
+            displayName = displayName.replace('Spanish', '').trim();
+        }
+        if (displayName.includes('Español')) {
+            displayName = displayName.replace('Español', '').trim();
         }
         
+        // 添加地區標識
+        let regionFlag = '🇪🇸';
+        if (voice.lang.includes('MX')) {
+            regionFlag = '🇲🇽';
+        } else if (voice.lang.includes('AR')) {
+            regionFlag = '🇦🇷';
+        } else if (voice.lang.includes('CO')) {
+            regionFlag = '🇨🇴';
+        } else if (voice.lang.includes('PE')) {
+            regionFlag = '🇵🇪';
+        }
+        
+        option.textContent = `${displayName} ${regionFlag}`;
         voiceSelect.appendChild(option);
     });
     
@@ -341,7 +369,13 @@ async function startNewQuestion() {
 
 // 檢查答案的函式
 function checkAnswer() {
-    const userAnswer = parseInt(currentInputValue, 10);
+    // 優先使用輸入框的值，如果為空則使用數字按鈕的值
+    let userInputValue = answerInput.value.trim();
+    if (!userInputValue) {
+        userInputValue = currentInputValue;
+    }
+    
+    const userAnswer = parseInt(userInputValue, 10);
 
     resultMessage.className = 'result';
 
@@ -357,6 +391,10 @@ function checkAnswer() {
         resultMessage.textContent = `❌ 不對喔。正確答案是 ${currentNumber}。`;
         resultMessage.classList.add('incorrect');
     }
+    
+    // 同步更新 currentInputValue
+    currentInputValue = userInputValue;
+    updateNumberDisplay();
     
     // 進入「已檢查答案」階段
     updateUIState('answer_checked');
@@ -391,6 +429,12 @@ answerInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !actionBtn.disabled && actionBtn.textContent === '檢查答案') {
         checkAnswer();
     }
+});
+
+// 同步輸入框的變化到數字按鈕顯示
+answerInput.addEventListener('input', () => {
+    currentInputValue = answerInput.value;
+    updateNumberDisplay();
 });
 
 // 語音設定面板事件監聽器
@@ -501,3 +545,27 @@ if (document.readyState === 'loading') {
 } else {
     initializeApp();
 }
+
+// 監聽視窗大小變化，重新調整輸入方式
+window.addEventListener('resize', () => {
+    // 延遲執行，避免頻繁觸發
+    setTimeout(() => {
+        if (isMobileDevice()) {
+            // 手機設備：隱藏輸入框，顯示數字按鈕
+            if (answerInput) {
+                answerInput.style.display = 'none';
+            }
+            if (numberPad) {
+                numberPad.style.display = 'block';
+            }
+        } else {
+            // 桌面設備：顯示輸入框，隱藏數字按鈕
+            if (answerInput) {
+                answerInput.style.display = 'block';
+            }
+            if (numberPad) {
+                numberPad.style.display = 'none';
+            }
+        }
+    }, 100);
+});
